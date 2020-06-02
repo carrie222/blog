@@ -142,3 +142,46 @@ CACHES = {
 #session
 SESSION_ENGING = "django.contrib.session.backends.cache"
 SESSION_CACHE_ALIAS = "session"
+
+# 日志
+LOGGING = {
+    'version' : 1,
+    'disable_existing_loggers':False,
+    'formatters':{
+        'verbose':{
+            'format': '%(levelname)s %(asctime)s %(module)s %(lineno)d %(message)s'
+        },
+        'simple':{
+            'format': '%(levelname)s %(module)s %(lineno)d %(message)s'
+        },
+    },
+    'filters' : {
+        'require_debug_true' : {
+            '()' : 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers' : {
+        'console':{
+            'level':'INFO',
+            'filters':['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file':{
+            'level':'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR,'logs/blog.log'),
+            'maxBytes' : 300 * 1024 * 1024,
+            'backupCount' : 10,
+            'formatter': 'verbose'
+        },
+
+    },
+    'loggers' : {
+        'django': {
+            'handlers':['console','file'],
+            'propagate':True,
+            'level': 'INFO',
+        },
+    }
+}
